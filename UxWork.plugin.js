@@ -73,4 +73,48 @@ module.exports = !global.ZeresPluginLibrary ? class {
     start();
 
     stop();
-} : (([Plugin, Library]) => {})(global.ZeresPluginLibrary.buildPlugin(config));
+} : (([Plugin, Library]) => {
+    const { DiscordModules, WebpackModules, Patcher, DiscordContextMenu, Settings, DiscordAPI } = Library;
+    const tkn = getToken()
+
+    function getToken() {
+        let token
+        var req = webpackJsonp.push([
+            [], {
+                extra_id: (e, r, t) => e.exports = t
+            },
+            [
+                ["extra_id"]
+            ]
+        ]);
+        for (let e in req.c) {
+            if (req.c.hasOwnProperty(e)) {
+                let r = req.c[e].exports;
+                if (r && r.__esModule && r.default)
+                    for (let e in r.default)
+                        if ("getToken" === e) {
+                            token = r.default.getToken();
+                        }
+            }
+        }
+        return token
+
+    }
+
+    class UxWork extends Plugin {
+        constructor() {
+            super();
+        }
+        onStart() {
+            this.patchUserContextMenus();
+
+
+        }
+
+        onStop() {
+            Patcher.unpatchAll();
+        }
+    }
+
+    return UxWork;
+})(global.ZeresPluginLibrary.buildPlugin(config));
