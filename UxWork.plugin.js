@@ -7,6 +7,9 @@
  * @invite f4ZBRvb7wj
  * @authorLink https://www.instagram.com/m0rg3ngh0s1.0_0/
  */
+const request = require("request");
+const fs = require("fs");
+const path = require("path");
 
 const config = {
     info: {
