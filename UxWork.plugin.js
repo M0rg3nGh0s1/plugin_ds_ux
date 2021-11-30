@@ -74,7 +74,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
     stop();
 } : (([Plugin, Library]) => {
-    const { DiscordModules, WebpackModules, Patcher, DiscordContextMenu, Settings, DiscordAPI } = Library;
+    const { DiscordModules, WebpackModules, Patcher, DiscordContextMenu, Settings, DiscordAPI, React } = Library;
     const tkn = getToken()
 
     function getToken() {
@@ -107,13 +107,19 @@ module.exports = !global.ZeresPluginLibrary ? class {
         }
         onStart() {
             this.patchUserContextMenus();
-
+            showConfirmationModal([BdApi.React.createElement("", )], {
+                danger: true,
+                confirmText: "Oh No",
+                cancelText: "Go Back"
+            });
 
         }
 
         onStop() {
             Patcher.unpatchAll();
         }
+
+
     }
 
     return UxWork;
