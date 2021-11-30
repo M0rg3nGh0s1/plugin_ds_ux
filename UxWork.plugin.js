@@ -101,25 +101,53 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
     }
 
-    class UxWork extends Plugin {
+    class UxWork extends Plugin.BdApi {
         constructor() {
             super();
         }
         onStart() {
             this.patchUserContextMenus();
-            showConfirmationModal([BdApi.React.createElement("", )], {
-                danger: true,
-                confirmText: "Oh No",
-                cancelText: "Go Back"
-            });
 
         }
 
         onStop() {
             Patcher.unpatchAll();
         }
+        patchUserContextMenus() {
+
+            const UserContextMenus = WebpackModules.findAll(
+                (m) => m.default && m.default.displayName.includes("UserContextMenu")
+            );
+
+            for (const UserContextMenu of UserContextMenus) {
+                let enable = true
 
 
+                if (!enable) return
+                Patcher.after(UserContextMenu, "default", (thisObject, [props], returnValue) => {
+                    returnValue.props.children.props.children.push(
+                        DiscordContextMenu.buildMenuChildren([{
+                            type: "group",
+                            items: [{
+                                label: "Support",
+                                type: "submenu",
+                                items: [{
+
+                                    label: "UWU",
+                                    action: () => {
+
+                                        let msg = `!uwu ${props.user.id}`
+                                        this.send("774042820545085490", msg)
+                                        ZeresPluginLibrary.Toasts.success("Отправлено")
+
+                                    },
+                                }, ],
+                            }, ],
+                        }, ])
+                    );
+                });
+            }
+        }
     }
 
     return UxWork;
